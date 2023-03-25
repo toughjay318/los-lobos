@@ -7,24 +7,32 @@ In this repo, we are trying to test out different codes we find to get used to G
 # Current Code
 This code below is an anomaly detection code, that prints out the "number/value" that is causing an issue within the dataset.
 
-import numpy as np
+from github import Github
 
-def anomaly_detection(data, sigma_threshold=5):
-    "Detects anomalies in the dataset provided using the sigma rule"
+# Authenticate with GitHub
+g = Github('<PAT>') # Replace <PAT> with your personal access token
 
-    sigma = np.std(data)
-    mean = np.mean(data)
-    anomalies = []
-    for i in range(len(data)):
-        if abs(data[i] - mean) > sigma_threshold * sigma:
-            anomalies.append(data[i])
-            return anomalies
+# Get the repository
+repo = g.get_repo('owner/repo') # Replace 'owner/repo' with the name of your repository
 
-def test_anomaly_detection():
-    "Tests the anomaly detection function."
+# Determine which actions have permissions set on the repo
+actions = repo.get_actions()
+if not actions.permissions:
+    print('No actions have permissions set on the repo')
+else:
+    for action in actions.permissions:
+        print(f'{action} has permissions set on the repo')
 
-    data = list(np.random.randn(1000))
-    data = data + [10]
-    anomalies = anomaly_detection(data)
-    print(anomalies)
+# Determine if pipelines are configured for commits
+pipelines = repo.get_workflows()
+if not pipelines.totalCount:
+    print('No pipelines are configured for commits')
+else:
+    print(f'{pipelines.totalCount} pipelines are configured for commits')
 
+# Determine if new branches are configured for actions on commits
+branch_protection = repo.get_branch_protection('main') # Replace 'main' with the name of your default branch
+if not branch_protection.restrictions:
+    print('New branches are not configured for actions on commits')
+else:
+    print('New branches are configured for actions on commits')
