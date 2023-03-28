@@ -2,11 +2,11 @@ from github import Github
 
 //Authenticate with GitHub
 
-g = Github("<PAT>") //Replace <PAT> with your personal access token
+g = Github("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") //Replace <PAT> with your personal access token
 
 //Get the repository
 
-repo = g.get_repo("owner/repo") //Replace 'owner/repo' with the name of your repository
+repo = g.get_repo("los-lobos") //Replace 'owner/repo' with the name of your repository
 
 //Determine which actions have permissions set on the repo
 
