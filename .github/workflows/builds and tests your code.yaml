@@ -1,0 +1,33 @@
+name: Build, Test, Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Build and Test
+      run: |
+        python build.py
+        python test.py
+
+    - name: Deploy
+      run: python deploy.py
+
+    - name: Send notifications
+      run: python notify.py
