@@ -1,0 +1,13 @@
+name: Actions on New Branches
+on:
+  create:
+    branches:
+      - '*' # specify the branch pattern for which the action should be triggered
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      # Define other steps for the action as needed
