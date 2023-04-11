@@ -1,0 +1,38 @@
+name: Check Actions Permissions
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  check-permissions:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Check Actions Permissions
+      run: |
+        actions_with_permissions=0
+        actions_without_permissions=0
+        for file in .github/workflows/*; do
+          if grep -q "permissions:" "$file"; then
+            echo "Permissions set for $file"
+            actions_with_permissions=$((actions_with_permissions+1))
+          else
+            echo "No permissions set for $file"
+            actions_without_permissions=$((actions_without_permissions+1))
+          fi
+        done
+
+        if [ "$actions_with_permissions" -gt 0 ]; then
+          echo "::error::Some actions have permissions set on the repository."
+        else
+          echo "::warning::No actions have permissions set on the repository."
+        fi
+
+        if [ "$actions_without_permissions" -gt 0 ]; then
+          echo "::warning::Some actions do not have permissions set on the repository."
+        else
+          echo "::success::All actions have permissions set on the repository."
+        fi
