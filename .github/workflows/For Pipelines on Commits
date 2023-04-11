@@ -1,0 +1,25 @@
+name: Pipeline on Commits
+on:
+  push:
+    branches:
+      - main # specify the branch name for which the pipeline should be triggered
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9 # specify the desired Python version
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt # specify the command to install dependencies, if any
+
+      - name: Run tests
+        run: python -m unittest discover # specify the command to run tests, if any
+
+      # Define other steps for the pipeline as needed
